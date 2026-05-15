@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Représentations de la créativité — ACM HEP Vaud</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --hep-blue: #009CDE;
+  --hep-dark: #00354C;
+  --hep-light: #CEE7FA;
+  --hep-mid: #94CEF2;
+  --text: #1a1a1a;
+  --text-sec: #5a5a5a;
+  --text-ter: #8a8a8a;
+  --bg: #ffffff;
+  --bg-sec: #f7f8fa;
+  --border: rgba(0,0,0,0.10);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e8e8e8;
+    --text-sec: #a0a0a0;
+    --text-ter: #707070;
+    --bg: #18181b;
+    --bg-sec: #232326;
+    --border: rgba(255,255,255,0.10);
+  }
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+  min-height: 100vh;
+}
+
+a { color: var(--hep-blue); }
+
+/* ── Header ─────────────────────────────────────────────── */
+.site-header {
+  background: var(--hep-dark);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--hep-blue);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo-mark svg { display: block; }
+.logo-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.logo-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 400;
+}
+.header-tag {
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.05em;
+}
+
+/* ── Hero ────────────────────────────────────────────────── */
+.hero {
+  background: var(--hep-dark);
+  padding: 48px 24px 52px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: var(--hep-blue);
+}
+.hero-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hep-blue);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+.hero h1 {
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 500;
+  color: #ffffff;
+  line-height: 1.3;
+  max-width: 640px;
+  margin: 0 auto 16px;
+}
+.hero-sub {
+  font-size: 15px;
+  color: rgba(255,255,255,0.65);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Layout ──────────────────────────────────────────────── */
+.page-body {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── Instructions card ───────────────────────────────────── */
+.instructions {
+  background: var(--bg-sec);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--hep-blue);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 16px 20px;
+  margin-bottom: 36px;
+  font-size: 14px;
+  color: var(--text-sec);
+  line-height: 1.6;
+}
+.instructions strong { color: var(--text); font-weight: 500; }
+
+/* ── Track ───────────────────────────────────────────────── */
+.track-section { margin-bottom: 32px; }
+
+.track-outer {
+  position: relative;
+  padding: 6px 0 28px;
+}
+.track-line {
+  position: absolute;
+  top: 26px;
+  left: 44px;
+  right: 44px;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
+}
+.track-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+/* Stage button */
+.s-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  background: none;
+  padding: 4px;
+  cursor: pointer;
+  flex: 1;
+  transition: transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.s-btn:hover { transform: translateY(-3px); }
+.s-btn:focus-visible { outline: 2px solid var(--hep-blue); outline-offset: 4px; border-radius: 50%; }
+
+.s-dot {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2.5px solid;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.s-btn.sel .s-dot { transform: scale(1.2); box-shadow: 0 0 0 5px rgba(0,0,0,0.07); }
+.s-btn.sel .s-num { color: #fff !important; }
+
+.s-lbl {
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.35;
+  color: var(--text-ter);
+  max-width: 86px;
+  transition: color 0.15s, font-weight 0.15s;
+}
+.s-btn.sel .s-lbl { font-weight: 500; color: var(--text); }
+
+/* ── Info card ───────────────────────────────────────────── */
+.info-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-sec);
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+.card-accent { height: 5px; transition: background 0.25s; }
+.card-body { padding: 24px 26px 26px; }
+
+.c-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  letter-spacing: 0.02em;
+}
+.c-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.c-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+@media (max-width: 560px) {
+  .c-grid { grid-template-columns: 1fr; }
+}
+
+.c-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+}
+.c-block.full {
+  grid-column: 1 / -1;
+}
+
+.c-lbl {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-ter);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.c-lbl-icon { font-size: 14px; }
+.c-txt {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.c-next {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-sec);
+  line-height: 1.55;
+  grid-column: 1 / -1;
+}
+.next-arrow {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: var(--hep-blue);
+}
+.c-final {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-sec);
+  line-height: 1.55;
+  grid-column: 1 / -1;
+}
+.final-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: #1D9E75;
+}
+
+/* Stage number indicator */
+.progress-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.progress-label { font-size: 13px; font-weight: 500; color: var(--text); }
+.progress-count { font-size: 12px; color: var(--text-ter); }
+.progress-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+/* ── References ──────────────────────────────────────────── */
+.references {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.references h2 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-ter);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 12px;
+}
+.ref-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ref-list li {
+  font-size: 12px;
+  color: var(--text-sec);
+  line-height: 1.5;
+  padding-left: 16px;
+  position: relative;
+}
+.ref-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--hep-mid);
+}
+
+/* ── Footer ──────────────────────────────────────────────── */
+.site-footer {
+  background: var(--hep-dark);
+  padding: 20px 24px;
+  text-align: center;
+}
+.footer-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+.footer-text span { color: rgba(255,255,255,0.65); }
+
+/* ── Print ───────────────────────────────────────────────── */
+@media print {
+  .site-header, .site-footer { display: none; }
+  .page-body { padding: 20px; max-width: 100%; }
+  .track-section { display: none; }
+  .hero { padding: 24px; background: #fff; color: #000; }
+  .hero h1, .hero-eyebrow, .hero-sub { color: #000 !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" class="header-logo">
+    <div class="logo-mark">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <path d="M3 14L9 4L15 14H3Z" stroke="#fff" stroke-width="1.5" fill="none" stroke-linejoin="round"/>
+        <circle cx="9" cy="11" r="1.5" fill="#fff"/>
+      </svg>
+    </div>
+    <div>
+      <div class="logo-text">HEP Vaud</div>
+      <div class="logo-sub">Didactique des ACM</div>
+    </div>
+  </a>
+  <span class="header-tag">BP41 ACM — 2e année</span>
+</header>
+
+<section class="hero">
+  <p class="hero-eyebrow">Outil réflexif</p>
+  <h1>Où en êtes-vous dans votre représentation de la créativité&nbsp;?</h1>
+  <p class="hero-sub">Avant d'entrer dans les modèles théoriques, situez-vous honnêtement. Il n'y a pas de bonne ou de mauvaise réponse — seulement un point de départ.</p>
+</section>
+
+<main class="page-body">
+
+  <div class="instructions">
+    <strong>Comment utiliser cet outil&nbsp;:</strong> Cliquez sur l'étape qui correspond le mieux à ce que vous pensez de la créativité <em>aujourd'hui</em>, avant la lecture du chapitre. Chaque position vous renvoie une description de cette représentation, ses implications pour l'enseignement, et ce que la recherche en dit. Vous pourrez y revenir en fin de module pour observer si votre position a évolué.
+  </div>
+
+  <div class="track-section">
+    <div class="progress-row">
+      <span class="progress-label" id="prog-label">Étape 1 sur 5</span>
+      <span class="progress-count" id="prog-name">Don naturel</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:20%"></div>
+    </div>
+
+    <div class="track-outer">
+      <div class="track-line"></div>
+      <div class="track-steps" id="steps"></div>
+    </div>
+  </div>
+
+  <div class="info-card" id="card">
+    <div class="card-accent" id="card-accent"></div>
+    <div class="card-body" id="card-body"></div>
+  </div>
+
+  <div class="references">
+    <h2>Références citées</h2>
+    <ul class="ref-list">
+      <li>Amabile, T. M., Conti, R., Coon, H., Lazenby, J., &amp; Herron, M. (1996). Assessing the work environment for creativity. <em>Academy of Management Journal</em>, <em>39</em>(5), 1154–1184.</li>
+      <li>Barbot, B., Lubart, T. I., &amp; Besançon, M. (2016). "Peaks, slumps, and bumps": Individual differences in the development of creativity in children and adolescents. <em>New Directions for Child and Adolescent Development</em>, <em>2016</em>(151), 33–45.</li>
+      <li>Corazza, G. E., Reiter-Palmon, R., Beghetto, R. A., &amp; Lubart, T. (2021). Intelligence and creativity in the space-time continuum. <em>Journal of Creativity</em>, <em>31</em>, 100003.</li>
+      <li>Lubart, T., Tordjman, S., &amp; Zenasni, F. (2025). <em>Psychologie de la créativité</em> (3e éd.). Dunod.</li>
+      <li>Lubart, T. (2017). Enfants exceptionnellement créatifs. <em>Revue française de pédagogie</em>.</li>
+      <li>Selkrig, M., &amp; Keamy, R. K. (2017). Creative pedagogy: a case for teachers' creative learning being at the centre. <em>Teaching Education</em>, <em>28</em>(3), 317–332.</li>
+    </ul>
+  </div>
+
+</main>
+
+<footer class="site-footer">
+  <p class="footer-text">
+    <span>Activités Créatrices et Manuelles — Support de cours 2e année</span><br>
+    Massy, G. et al. (2025) · HEP Vaud · Usage pédagogique interne
+  </p>
+</footer>
+
+<script>
+const stages = [
+  {
+    id: 1,
+    label: "Don\nnaturel",
+    color: "#D85A30",
+    fill: "#FAECE7",
+    textColor: "#712B13",
+    badge: "Étape 1 — Représentation naïve",
+    title: "La créativité : un talent inné que l'école ne peut pas changer",
+    repr: "La créativité est perçue comme un don rare avec lequel on naît — ou non. Certains élèves sont « naturellement » créatifs ; les autres ne le seront jamais vraiment. L'enseignant peut observer cette différence, mais il ne peut pas la modifier.",
+    enseignement: "Dans cette logique, le rôle de l'enseignant se réduit à ne pas entraver les élèves « créatifs » et à encadrer les autres. La créativité n'est pas conçue comme un objet d'enseignement : on l'observe, on ne la développe pas. Les séquences en ACM visent principalement la réalisation technique.",
+    recherche: "Cette représentation est très répandue mais invalidée par la psychologie de la créativité. Toute personne possède un potentiel créatif (Lubart et al., 2025), qui se développe différemment selon les ressources individuelles, l'environnement et les tâches proposées (Barbot, Lubart & Besançon, 2016).",
+    next: "Vers la prochaine étape : considérez si l'environnement et les choix pédagogiques peuvent influencer la créativité des élèves, indépendamment de leur « nature ».",
+    last: false
+  },
+  {
+    id: 2,
+    label: "Liberté\nd'expression",
+    color: "#BA7517",
+    fill: "#FAEEDA",
+    textColor: "#633806",
+    badge: "Étape 2 — Représentation intuitive",
+    title: "La créativité : laisser faire et tout ira bien",
+    repr: "La créativité équivaut à la liberté totale. Il suffit de donner du temps libre, des matériaux variés et peu de contraintes pour que les élèves s'expriment créativement. Toute production spontanée est créative.",
+    enseignement: "L'enseignant propose des activités très ouvertes, sans consignes précises. La confiance dans la spontanéité remplace la planification pédagogique. Les séquences sont peu structurées et l'évaluation devient difficile à opérer — puisque tout peut être considéré comme créatif.",
+    recherche: "La liberté totale peut produire de l'angoisse, du blocage et des productions peu élaborées. Les contraintes bien dosées stimulent la créativité en donnant un point d'appui (Amabile, 1996). Sans acquisition de techniques, l'élève manque des ressources pour matérialiser ses idées — la créativité a besoin d'un répertoire pour s'exprimer.",
+    next: "Vers la prochaine étape : explorez comment une structure et des contraintes pensées peuvent devenir des leviers créatifs plutôt que des obstacles.",
+    last: false
+  },
+  {
+    id: 3,
+    label: "Maîtrise\ntechnique",
+    color: "#3B6D11",
+    fill: "#EAF3DE",
+    textColor: "#27500A",
+    badge: "Étape 3 — Représentation technique",
+    title: "La créativité : le résultat naturel du savoir-faire",
+    repr: "La créativité découle de la maîtrise des techniques. Un élève qui sait bien travailler le bois, modeler l'argile ou réaliser des points de broderie sera forcément plus créatif qu'un élève qui ne maîtrise pas ces gestes.",
+    enseignement: "L'enseignement se concentre sur la transmission de gestes précis et de savoir-faire disciplinaires. L'espace de recherche personnelle est limité : on reproduit avant d'inventer. Les consignes sont principalement tayloriennes (procédures closes). La qualité du produit fini est le principal critère d'évaluation.",
+    recherche: "La technique est une ressource nécessaire mais insuffisante. La bibliothèque gestuelle mentale enrichit les possibles créatifs, mais la créativité requiert aussi des ressources cognitives (pensée divergente), motivationnelles et un environnement favorable (Lubart, 2017). Maîtriser une technique ne garantit pas la mobilisation créative.",
+    next: "Vers la prochaine étape : envisagez comment combiner l'acquisition technique avec des situations ouvertes de recherche et d'expérimentation.",
+    last: false
+  },
+  {
+    id: 4,
+    label: "Processus\ncréatif",
+    color: "#1D9E75",
+    fill: "#E1F5EE",
+    textColor: "#085041",
+    badge: "Étape 4 — Représentation didactique",
+    title: "La créativité : une démarche structurée qu'on peut enseigner",
+    repr: "La créativité est un processus fait d'étapes — recherche d'idées, expérimentation, ajustements, réalisation — que l'on peut accompagner et rendre visible grâce au carnet de conception, au croquis et à la démarche CRS (Conception–Réalisation–Socialisation).",
+    enseignement: "L'enseignant organise des séquences autour du processus complet, valorise les essais et les ajustements, et utilise les traces du processus créatif pour évaluer. Les consignes sont souvent discrétionnaires (ouvertes avec contraintes). La grille DFJC distingue processus et production finale.",
+    recherche: "Cette vision permet d'enseigner et d'évaluer la créativité de façon rigoureuse. Elle reconnaît l'incomplétude créative — les tentatives infructueuses — comme étape productive (Corazza et al., 2021). Risque : trop structurer le processus peut réduire la prise de risque spontanée si les étapes deviennent des cases à cocher.",
+    next: "Vers la prochaine étape : intégrez la dimension développementale — la créativité évolue différemment selon les âges, les individus et les contextes.",
+    last: false
+  },
+  {
+    id: 5,
+    label: "Compétence\ndéveloppementale",
+    color: "#185FA5",
+    fill: "#E6F1FB",
+    textColor: "#0C447C",
+    badge: "Étape 5 — Représentation de recherche",
+    title: "La créativité : une compétence multidimensionnelle, développable et évaluable",
+    repr: "La créativité est une capacité cognitive, motivationnelle et affective qui se développe différemment selon les individus, les contextes et les âges. Elle peut être délibérément soutenue par des pratiques pédagogiques intentionnelles.",
+    enseignement: "L'enseignant planifie des environnements créatifs (5 dimensions), adapte ses interventions au développement de chaque élève, évalue le processus autant que le produit (modèle 3P de Mastracci, 2011), et assume sa propre créativité professionnelle (Selkrig & Keamy, 2017). Il connaît les outils institutionnels et leurs limites.",
+    recherche: "Cette représentation est la plus ancrée dans la recherche actuelle (Lubart et al., 2025 ; Barbot, Lubart & Besançon, 2016). Elle reconnaît la complexité du développement créatif, ses variations individuelles et le rôle déterminant de l'environnement scolaire.",
+    last: true
+  }
+];
+
+let sel = 0;
+
+function renderSteps() {
+  const container = document.getElementById('steps');
+  container.innerHTML = '';
+  stages.forEach((s, i) => {
+    const btn = document.createElement('button');
+    btn.className = 's-btn' + (i === sel ? ' sel' : '');
+    btn.setAttribute('aria-pressed', i === sel ? 'true' : 'false');
+    btn.setAttribute('aria-label', 'Étape ' + (i + 1) + ' : ' + s.label.replace('\n', ' '));
+
+    const dot = document.createElement('div');
+    dot.className = 's-dot';
+    dot.style.borderColor = s.color;
+    dot.style.backgroundColor = i === sel ? s.color : '';
+
+    const num = document.createElement('span');
+    num.className = 's-num';
+    num.textContent = i + 1;
+    num.style.color = i === sel ? '#fff' : s.color;
+
+    dot.appendChild(num);
+
+    const lbl = document.createElement('div');
+    lbl.className = 's-lbl';
+    lbl.innerHTML = s.label.replace('\n', '<br>');
+
+    btn.appendChild(dot);
+    btn.appendChild(lbl);
+    btn.addEventListener('click', () => { sel = i; render(); });
+    container.appendChild(btn);
+  });
+}
+
+function svgArrow() {
+  return '<svg class="next-arrow" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9h11M10 4.5L14.5 9 10 13.5"/></svg>';
+}
+function svgCheck() {
+  return '<svg class="final-icon" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9.5L7.5 13.5L14.5 5.5"/></svg>';
+}
+function svgRepr() {
+  return '<svg class="c-lbl-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="7" cy="7" r="5"/><path d="M7 4.5v2.5L8.5 8.5"/></svg>';
+}
+function svgClass() {
+  return '<svg class="c-lbl-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="2" y="3" width="10" height="8" rx="1.5"/><path d="M5 3V2M9 3V2"/></svg>';
+}
+function svgResearch() {
+  return '<svg class="c-lbl-icon" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="6" cy="6" r="4"/><path d="M9.5 9.5L12 12"/></svg>';
+}
+
+function renderCard() {
+  const s = stages[sel];
+  const accent = document.getElementById('card-accent');
+  const body = document.getElementById('card-body');
+
+  accent.style.background = s.color;
+
+  let html = '<div class="c-badge" style="background:' + s.fill + ';color:' + s.textColor + '">' + s.badge + '</div>';
+  html += '<p class="c-title">' + s.title + '</p>';
+  html += '<div class="c-grid">';
+  html += '<div class="c-block"><div class="c-lbl">' + svgRepr() + ' Représentation</div><p class="c-txt">' + s.repr + '</p></div>';
+  html += '<div class="c-block"><div class="c-lbl">' + svgClass() + ' Implications pour l\'enseignement</div><p class="c-txt">' + s.enseignement + '</p></div>';
+  html += '<div class="c-block full"><div class="c-lbl">' + svgResearch() + ' Ce que la recherche dit</div><p class="c-txt">' + s.recherche + '</p></div>';
+
+  if (!s.last) {
+    html += '<div class="c-next">' + svgArrow() + '<span>' + s.next + '</span></div>';
+  } else {
+    html += '<div class="c-final">' + svgCheck() + '<span>Cette représentation est la plus proche des données actuelles de la recherche. Elle n\'est pas un point d\'arrivée figé : elle invite à une réflexion continue sur ses propres pratiques et à un dialogue avec ses collègues.</span></div>';
+  }
+
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+function renderProgress() {
+  const s = stages[sel];
+  document.getElementById('prog-label').textContent = 'Étape ' + (sel + 1) + ' sur 5';
+  document.getElementById('prog-name').textContent = s.label.replace('\n', ' ');
+  const fill = document.getElementById('prog-fill');
+  fill.style.width = ((sel + 1) / 5 * 100) + '%';
+  fill.style.background = s.color;
+}
+
+function render() {
+  renderSteps();
+  renderCard();
+  renderProgress();
+}
+
+render();
+</script>
+</body>
+</html>
